@@ -72,7 +72,7 @@ fun PuertaScreen() {
     }
 
 
-    val PuertaViewModel: PuertaViewModel = viewModel(
+    val puertaViewModel: PuertaViewModel = viewModel(
         factory = PuertaViewModelFactory(
             database.puertaDao()
         )
@@ -122,8 +122,8 @@ fun PuertaScreen() {
     }
 
     fun reiniciarValores(){
-        editarPuerta = !editarPuerta
-        registrarPuerta = !registrarPuerta
+        editarPuerta = false
+        registrarPuerta = false
     }
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
@@ -148,7 +148,7 @@ fun PuertaScreen() {
                 text = "Puertas Registradas"
             )
 
-            if (PuertaViewModel.puertas.isEmpty()) {
+            if (puertaViewModel.puertas.isEmpty()) {
 
                 Text(
                     text = "No tienes puertas registradas.",
@@ -158,7 +158,7 @@ fun PuertaScreen() {
             }
             else {
 
-                PuertaViewModel.puertas.forEach { puerta ->
+                puertaViewModel.puertas.forEach { puerta ->
 
                 Card(
                         modifier = Modifier
@@ -317,7 +317,7 @@ fun PuertaScreen() {
 
                         if (editarPuerta) {
 
-                            PuertaViewModel.actualizarPuerta(
+                            puertaViewModel.actualizarPuerta(
                                 Puerta(
                                     id = puertaSeleccionada!!.id,
                                     nombre = nombrePuerta,
@@ -330,7 +330,7 @@ fun PuertaScreen() {
 
                         } else {
 
-                            PuertaViewModel.guardarPuerta(
+                            puertaViewModel.guardarPuerta(
                                 nombre = nombrePuerta,
                                 latitud = latitud!!,
                                 longitud = longitud!!
@@ -377,7 +377,7 @@ fun PuertaScreen() {
 
                         if (puertaAEliminar != null) {
 
-                            PuertaViewModel.eliminarPuerta(puertaAEliminar)
+                            puertaViewModel.eliminarPuerta(puertaAEliminar)
 
                             mostrarDialogoEliminar = false
                             puertaSeleccionada = null
