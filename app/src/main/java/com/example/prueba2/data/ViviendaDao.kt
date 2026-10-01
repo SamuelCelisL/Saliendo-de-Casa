@@ -20,4 +20,7 @@ interface ViviendaDao {
 
     @Query("SELECT * FROM viviendas LIMIT 1")
     suspend fun obtenerVivienda(): Vivienda?
+
+    //@Query("SELECT * FROM viviendas ")
+    //suspend fun obtenerVivienda(): Vivienda?
 }

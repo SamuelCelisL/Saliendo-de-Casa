@@ -35,6 +35,7 @@ import androidx.core.content.ContextCompat
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.prueba2.data.AppDatabase
+import com.example.prueba2.data.Vivienda
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,6 +117,10 @@ fun ViviendaScreen() {
         }
     }
 
+    fun reiniciarValores(){
+        editarVivienda = !editarVivienda
+        registrarVivienda = !registrarVivienda
+    }
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -131,7 +136,7 @@ fun ViviendaScreen() {
         }
     }
 
-    if (!registrarVivienda){
+    if (!registrarVivienda && !editarVivienda){
 
         Column {
 
@@ -205,13 +210,13 @@ fun ViviendaScreen() {
         }
     }
     else {
-
+        val vivienda = viviendaViewModel.vivienda!!
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
                 onClick = {
-                    registrarVivienda = false
+                    reiniciarValores()
                 },
                 modifier = Modifier.padding(top = 24.dp)
             ) {
@@ -219,7 +224,7 @@ fun ViviendaScreen() {
             }
 
             Text(
-                text = "Registrar vivienda"
+                text = if (editarVivienda) "Editar vivienda" else "Registrar vivienda"
             )
 
             OutlinedTextField(
@@ -286,21 +291,47 @@ fun ViviendaScreen() {
 
             Button(
                 onClick = {
+
                     if (
                         nombreVivienda.isNotBlank() &&
                         latitud != null &&
                         longitud != null
                     ) {
-                        viviendaViewModel.guardarVivienda(
-                            nombre = nombreVivienda,
-                            latitud = latitud!!,
-                            longitud = longitud!!
-                        )
+
+                        if (editarVivienda) {
+
+                            viviendaViewModel.actualizarVivienda(
+                                Vivienda(
+                                    id = vivienda!!.id,
+                                    nombre = nombreVivienda,
+                                    latitud = latitud!!,
+                                    longitud = longitud!!
+                                )
+                            )
+
+                            editarVivienda = false
+
+                        } else {
+
+                            viviendaViewModel.guardarVivienda(
+                                nombre = nombreVivienda,
+                                latitud = latitud!!,
+                                longitud = longitud!!
+                            )
+
+                            registrarVivienda = false
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Guardar vivienda")
+                Text(
+                    if (editarVivienda) {
+                        "Guardar cambios"
+                    } else {
+                        "Guardar vivienda"
+                    }
+                )
             }
         }
     }
