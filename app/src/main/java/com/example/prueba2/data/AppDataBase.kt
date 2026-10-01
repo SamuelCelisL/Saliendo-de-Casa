@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Vivienda::class],
+    entities = [Puerta::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun viviendaDao(): ViviendaDao
+    abstract fun puertaDao(): PuertaDao
 
     companion object {
 

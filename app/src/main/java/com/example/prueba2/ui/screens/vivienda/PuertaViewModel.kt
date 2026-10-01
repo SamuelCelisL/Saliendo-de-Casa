@@ -1,30 +1,30 @@
+
 package com.example.prueba2.ui.screens.vivienda
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.prueba2.data.Puerta
 import com.example.prueba2.data.PuertaDao
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 
-class ViviendaViewModel(
+class PuertaViewModel(
     private val puertaDao: PuertaDao
 ) : ViewModel() {
 
-    var puerta by mutableStateOf<Puerta?>(null)
+    var puertas by mutableStateOf<List<Puerta>>(emptyList())
         private set
 
     init {
-        cargarVivienda()
+        cargarPuertas()
     }
 
-    private fun cargarVivienda() {
-
+    fun cargarPuertas() {
         viewModelScope.launch {
-
-            puerta = null
+            puertas = puertaDao.obtenerPuertas()
         }
     }
 
@@ -35,45 +35,44 @@ class ViviendaViewModel(
     ) {
         viewModelScope.launch {
 
-            val puerta = Puerta(
+            val nuevaPuerta = Puerta(
                 nombre = nombre,
                 latitud = latitud,
                 longitud = longitud
             )
 
-            puertaDao.insertarPuerta(puerta)
+            puertaDao.insertarPuerta(nuevaPuerta)
+
+            cargarPuertas()
         }
     }
 
-    fun actualizarPuerta(
-        puerta: Puerta
-    ) {
+    fun actualizarPuerta(puerta: Puerta) {
         viewModelScope.launch {
             puertaDao.actualizarPuerta(puerta)
-            this@ViviendaViewModel.puerta = puerta
+            cargarPuertas()
         }
     }
 
-    fun eliminarPuerta(
-        puerta: Puerta
-    ) {
+    fun eliminarPuerta(puerta: Puerta) {
         viewModelScope.launch {
             puertaDao.eliminarPuerta(puerta)
-            this@ViviendaViewModel.puerta = null
+            cargarPuertas()
         }
     }
 }
 
-class ViviendaViewModelFactory(
+class PuertaViewModelFactory(
     private val puertaDao: PuertaDao
-) : androidx.lifecycle.ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(
+        modelClass: Class<T>
+    ): T {
 
-        if (modelClass.isAssignableFrom(ViviendaViewModel::class.java)) {
-
+        if (modelClass.isAssignableFrom(PuertaViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ViviendaViewModel(puertaDao) as T
+            return PuertaViewModel(puertaDao) as T
         }
 
         throw IllegalArgumentException("ViewModel desconocido")

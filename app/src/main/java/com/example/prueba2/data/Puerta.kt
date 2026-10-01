@@ -3,8 +3,8 @@ package com.example.prueba2.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "viviendas")
-data class Vivienda(
+@Entity(tableName = "puertas")
+data class Puerta(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

@@ -35,17 +35,17 @@ import androidx.core.content.ContextCompat
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.prueba2.data.AppDatabase
-import com.example.prueba2.data.Vivienda
+import com.example.prueba2.data.Puerta
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViviendaScreen() {
+fun PuertaScreen() {
 
-    var registrarVivienda by remember {
+    var registrarPuerta by remember {
         mutableStateOf(false)
     }
 
-    var nombreVivienda by remember {
+    var nombrePuerta by remember {
         mutableStateOf("")
     }
 
@@ -57,8 +57,12 @@ fun ViviendaScreen() {
         mutableStateOf<Double?>(null)
     }
 
-    var editarVivienda by remember {
+    var editarPuerta by remember {
         mutableStateOf(false)
+    }
+
+    var puertaSeleccionada by remember {
+        mutableStateOf<Puerta?>(null)
     }
 
     val context = LocalContext.current
@@ -68,9 +72,9 @@ fun ViviendaScreen() {
     }
 
 
-    val viviendaViewModel: ViviendaViewModel = viewModel(
-        factory = ViviendaViewModelFactory(
-            database.viviendaDao()
+    val PuertaViewModel: PuertaViewModel = viewModel(
+        factory = PuertaViewModelFactory(
+            database.puertaDao()
         )
     )
 
@@ -118,8 +122,8 @@ fun ViviendaScreen() {
     }
 
     fun reiniciarValores(){
-        editarVivienda = !editarVivienda
-        registrarVivienda = !registrarVivienda
+        editarPuerta = !editarPuerta
+        registrarPuerta = !registrarPuerta
     }
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
@@ -136,81 +140,94 @@ fun ViviendaScreen() {
         }
     }
 
-    if (!registrarVivienda && !editarVivienda){
+    if (!registrarPuerta && !editarPuerta) {
 
         Column {
 
             Text(
-                text = "Vivienda"
+                text = "Puertas Registradas"
             )
-            if (viviendaViewModel.vivienda == null){
+
+            if (PuertaViewModel.puertas.isEmpty()) {
+
                 Text(
-                    text = "No tienes una vivienda registrada.",
+                    text = "No tienes puertas registradas.",
                     modifier = Modifier.padding(top = 16.dp)
                 )
 
-                Button(
-                    onClick = {
-                        registrarVivienda = true
-                    },
-                    modifier = Modifier.padding(top = 24.dp)
-                ) {
-                    Text("Registrar vivienda")
-                }
             }
             else {
 
-                val vivienda = viviendaViewModel.vivienda!!
+                PuertaViewModel.puertas.forEach { puerta ->
 
                 Card(
-                    modifier = Modifier.fillMaxWidth()
-                )   {
-                    Column(
-                        modifier = Modifier.padding(20.dp)
-                    )
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                    ) {
 
-                    {
-                        Text(
-                            text = "Nombre: ${vivienda.nombre}",
-                            modifier = Modifier.padding(top = 16.dp)
-                        )
-
-                        Text(
-                            text = "Latitud: ${vivienda.latitud}"
-                        )
-
-                        Text(
-                            text = "Longitud: ${vivienda.longitud}"
-                        )
-
-                        Button(
-                            onClick = {
-                                nombreVivienda = vivienda.nombre
-                                latitud = vivienda.latitud
-                                longitud = vivienda.longitud
-
-                                editarVivienda = true
-                            },
-                            modifier = Modifier.fillMaxWidth()
+                        Column(
+                            modifier = Modifier.padding(20.dp)
                         ) {
-                            Text("Editar")
-                        }
 
-                        Button(
-                            onClick = {
-                                mostrarDialogoEliminar = true
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("Eliminar")
+                            Text(
+                                text = "Nombre: ${puerta.nombre}"
+                            )
+
+                            Text(
+                                text = "Latitud: ${puerta.latitud}"
+                            )
+
+                            Text(
+                                text = "Longitud: ${puerta.longitud}"
+                            )
+
+                            Button(
+                                onClick = {
+                                    puertaSeleccionada = puerta
+                                    nombrePuerta = puerta.nombre
+                                    latitud = puerta.latitud
+                                    longitud = puerta.longitud
+
+                                    editarPuerta = true
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("Editar")
+                            }
+
+                            Button(
+                                onClick = {
+                                    puertaSeleccionada = puerta
+                                    mostrarDialogoEliminar = true
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("Eliminar")
+                            }
                         }
                     }
                 }
             }
+
+            Button(
+                onClick = {
+
+                    nombrePuerta = ""
+                    latitud = null
+                    longitud = null
+
+                    editarPuerta = false
+                    registrarPuerta = true
+                },
+                modifier = Modifier.padding(top = 24.dp)
+            ) {
+                Text("Registrar puerta")
+            }
         }
     }
     else {
-        val vivienda = viviendaViewModel.vivienda!!
+
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -224,13 +241,13 @@ fun ViviendaScreen() {
             }
 
             Text(
-                text = if (editarVivienda) "Editar vivienda" else "Registrar vivienda"
+                text = if (editarPuerta) "Editar vivienda" else "Registrar vivienda"
             )
 
             OutlinedTextField(
-                value = nombreVivienda,
+                value = nombrePuerta,
                 onValueChange = {
-                    nombreVivienda = it
+                    nombrePuerta = it
                 },
                 label = {
                     Text("Nombre de la vivienda")
@@ -293,40 +310,40 @@ fun ViviendaScreen() {
                 onClick = {
 
                     if (
-                        nombreVivienda.isNotBlank() &&
+                        nombrePuerta.isNotBlank() &&
                         latitud != null &&
                         longitud != null
                     ) {
 
-                        if (editarVivienda) {
+                        if (editarPuerta) {
 
-                            viviendaViewModel.actualizarVivienda(
-                                Vivienda(
-                                    id = vivienda!!.id,
-                                    nombre = nombreVivienda,
+                            PuertaViewModel.actualizarPuerta(
+                                Puerta(
+                                    id = puertaSeleccionada!!.id,
+                                    nombre = nombrePuerta,
                                     latitud = latitud!!,
                                     longitud = longitud!!
                                 )
                             )
 
-                            editarVivienda = false
+                            editarPuerta = false
 
                         } else {
 
-                            viviendaViewModel.guardarVivienda(
-                                nombre = nombreVivienda,
+                            PuertaViewModel.guardarPuerta(
+                                nombre = nombrePuerta,
                                 latitud = latitud!!,
                                 longitud = longitud!!
                             )
 
-                            registrarVivienda = false
+                            registrarPuerta = false
                         }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    if (editarVivienda) {
+                    if (editarPuerta) {
                         "Guardar cambios"
                     } else {
                         "Guardar vivienda"
@@ -335,20 +352,20 @@ fun ViviendaScreen() {
             }
         }
     }
-    if (mostrarDialogoEliminar) {
+    if (mostrarDialogoEliminar && puertaSeleccionada != null) {
 
-        val vivienda = viviendaViewModel.vivienda!!
         AlertDialog(
             onDismissRequest = {
                 mostrarDialogoEliminar = false
+                puertaSeleccionada = null
             },
 
             title = {
-                Text("Eliminar vivienda")
+                Text("Eliminar puerta")
             },
 
             text = {
-                Text("¿Estás seguro de que deseas eliminar esta vivienda?")
+                Text("¿Estás seguro de que deseas eliminar "+ "\"${puertaSeleccionada?.nombre}\"?")
             },
 
             confirmButton = {
@@ -356,9 +373,15 @@ fun ViviendaScreen() {
                 Button(
                     onClick = {
 
-                        viviendaViewModel.eliminarVivienda(vivienda)
+                        val puertaAEliminar = puertaSeleccionada
 
-                        mostrarDialogoEliminar = false
+                        if (puertaAEliminar != null) {
+
+                            PuertaViewModel.eliminarPuerta(puertaAEliminar)
+
+                            mostrarDialogoEliminar = false
+                            puertaSeleccionada = null
+                        }
                     }
                 ) {
                     Text("Eliminar")
@@ -370,6 +393,7 @@ fun ViviendaScreen() {
                 Button(
                     onClick = {
                         mostrarDialogoEliminar = false
+                        puertaSeleccionada = null
                     }
                 ) {
                     Text("Cancelar")

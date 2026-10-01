@@ -18,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.prueba2.ui.screens.vivienda.ViviendaScreen
+import com.example.prueba2.ui.screens.vivienda.PuertaScreen
 
 @Composable
 fun MenuScreen() {
@@ -86,7 +86,7 @@ fun MenuScreen() {
         ) {
             when(opcionSeleccionada){
                 "vivienda" -> {
-                    ViviendaScreen()
+                    PuertaScreen()
                 }
                 "objetos" -> {
                     Text(
