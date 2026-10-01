@@ -8,10 +8,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -24,6 +26,7 @@ import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.CurrentLocationRequest
@@ -31,6 +34,9 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 //import android.annotation.SuppressLint
 import androidx.core.content.ContextCompat
+
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.prueba2.data.AppDatabase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +58,21 @@ fun ViviendaScreen() {
         mutableStateOf<Double?>(null)
     }
 
+    var editarVivienda by remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
+
+    val database = remember {
+        AppDatabase.obtenerDatabase(context)
+    }
+
+    val viviendaViewModel: ViviendaViewModel = viewModel(
+        factory = ViviendaViewModelFactory(
+            database.viviendaDao()
+        )
+    )
 
     val fusedLocationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
@@ -117,19 +137,67 @@ fun ViviendaScreen() {
             Text(
                 text = "Vivienda"
             )
+            if (viviendaViewModel.vivienda == null){
+                Text(
+                    text = "No tienes una vivienda registrada.",
+                    modifier = Modifier.padding(top = 16.dp)
+                )
 
-            Text(
-                text = "No tienes una vivienda registrada.",
-                modifier = Modifier.padding(top = 16.dp)
-            )
+                Button(
+                    onClick = {
+                        registrarVivienda = true
+                    },
+                    modifier = Modifier.padding(top = 24.dp)
+                ) {
+                    Text("Registrar vivienda")
+                }
+            } else {
+                val vivienda = viviendaViewModel.vivienda!!
 
-            Button(
-                onClick = {
-                    registrarVivienda = true
-                },
-                modifier = Modifier.padding(top = 24.dp)
-            ) {
-                Text("Registrar vivienda")
+                Card(
+                    modifier = Modifier.fillMaxWidth()
+                )   {
+                    Column(
+                        modifier = Modifier.padding(20.dp)
+                    )
+
+                    {
+                        Text(
+                            text = "Nombre: ${vivienda.nombre}",
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+
+                        Text(
+                            text = "Latitud: ${vivienda.latitud}"
+                        )
+
+                        Text(
+                            text = "Longitud: ${vivienda.longitud}"
+                        )
+
+                        Button(
+                            onClick = {
+                                nombreVivienda = vivienda.nombre
+                                latitud = vivienda.latitud
+                                longitud = vivienda.longitud
+
+                                editarVivienda = true
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Editar")
+                        }
+
+                        Button(
+                            onClick = {
+                                viviendaViewModel.eliminarVivienda(vivienda)
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Eliminar")
+                        }
+                    }
+                }
             }
         }
     } else {
@@ -214,7 +282,18 @@ fun ViviendaScreen() {
 
             Button(
                 onClick = {
-                    // Aquí guardaremos la vivienda
+                    if (
+                        nombreVivienda.isNotBlank() &&
+                        latitud != null &&
+                        longitud != null
+                    ) {
+
+                        viviendaViewModel.guardarVivienda(
+                            nombre = nombreVivienda,
+                            latitud = latitud!!,
+                            longitud = longitud!!
+                        )
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
