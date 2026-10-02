@@ -76,7 +76,7 @@ fun PuertaScreen() {
 
     val puertaViewModel: PuertaViewModel = viewModel(
         factory = PuertaViewModelFactory(
-            database.puertaDao()
+            database.puertaDao(), context
         )
     )
 
