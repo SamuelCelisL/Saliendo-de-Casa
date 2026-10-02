@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -160,76 +162,86 @@ fun PuertaScreen() {
             }
             else {
 
-                puertaViewModel.puertas.forEach { puerta ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
 
-                Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp)
-                    ) {
+                    items(
+                        items = puertaViewModel.puertas,
+                        key = { puerta -> puerta.id }
+                    ) { puerta ->
 
-                        Column(
-                            modifier = Modifier.padding(20.dp)
+                        Card(
+                            modifier = Modifier.fillMaxWidth()
                         ) {
 
-                            Text(
-                                text = "Nombre: ${puerta.nombre}"
-                            )
-
-                            Text(
-                                text = "Latitud: ${puerta.latitud}"
-                            )
-
-                            Text(
-                                text = "Longitud: ${puerta.longitud}"
-                            )
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                            Column(
+                                modifier = Modifier.padding(20.dp)
                             ) {
 
                                 Text(
-                                    text = if (puerta.activa) {
-                                        "Puerta activa"
-                                    } else {
-                                        "Puerta desactivada"
-                                    }
+                                    text = "Nombre: ${puerta.nombre}"
                                 )
 
-                                Switch(
-                                    checked = puerta.activa,
-                                    onCheckedChange = { nuevoEstado ->
-
-                                        puertaViewModel.cambiarEstadoPuerta(
-                                            puerta = puerta,
-                                            activa = nuevoEstado
-                                        )
-                                    }
+                                Text(
+                                    text = "Latitud: ${puerta.latitud}"
                                 )
-                            }
 
-                            Button(
-                                onClick = {
-                                    puertaSeleccionada = puerta
-                                    nombrePuerta = puerta.nombre
-                                    latitud = puerta.latitud
-                                    longitud = puerta.longitud
+                                Text(
+                                    text = "Longitud: ${puerta.longitud}"
+                                )
 
-                                    editarPuerta = true
-                                },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text("Editar")
-                            }
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
 
-                            Button(
-                                onClick = {
-                                    puertaSeleccionada = puerta
-                                    mostrarDialogoEliminar = true
-                                },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text("Eliminar")
+                                    Text(
+                                        text = if (puerta.activa) {
+                                            "Puerta activa"
+                                        } else {
+                                            "Puerta desactivada"
+                                        }
+                                    )
+
+                                    Switch(
+                                        checked = puerta.activa,
+                                        onCheckedChange = { nuevoEstado ->
+
+                                            puertaViewModel.cambiarEstadoPuerta(
+                                                puerta = puerta,
+                                                activa = nuevoEstado
+                                            )
+                                        }
+                                    )
+                                }
+
+                                Button(
+                                    onClick = {
+                                        puertaSeleccionada = puerta
+                                        nombrePuerta = puerta.nombre
+                                        latitud = puerta.latitud
+                                        longitud = puerta.longitud
+
+                                        editarPuerta = true
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Editar")
+                                }
+
+                                Button(
+                                    onClick = {
+                                        puertaSeleccionada = puerta
+                                        mostrarDialogoEliminar = true
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Eliminar")
+                                }
                             }
                         }
                     }

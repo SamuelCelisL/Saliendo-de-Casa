@@ -125,21 +125,10 @@ class MainActivity : ComponentActivity() {
                                 MenuScreen(
 
                                 )
-
                         }
                     }
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Prueba2Theme {
-        WelcomeScreen {
-
         }
     }
 }

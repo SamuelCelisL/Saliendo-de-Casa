@@ -1,16 +1,16 @@
 package com.example.prueba2.ui.screens.menu
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,48 +25,68 @@ import com.example.prueba2.ui.screens.vivienda.PuertaScreen
 fun MenuScreen() {
 
     var opcionSeleccionada by remember {
-        mutableStateOf("vivienda")
+        mutableStateOf("puertas")
     }
-    Row(
+
+    var menuAbierto by remember {
+        mutableStateOf(false)
+    }
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
 
-        // MENÚ LATERAL
-        Column(
+        // BARRA SUPERIOR
+        Row(
             modifier = Modifier
-                .fillMaxHeight()
-                .width(150.dp)
-                .background(
-                    MaterialTheme.colorScheme.primaryContainer
-                )
+                .fillMaxWidth()
                 .padding(16.dp),
-
-            verticalArrangement = Arrangement.Top
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             Text(
                 text = "Salida de Casa",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 25.dp)
+                style = MaterialTheme.typography.titleLarge
             )
 
-            Button(
-                onClick = {
-                    opcionSeleccionada = "vivienda"
-                },
-                modifier = Modifier.padding(bottom = 12.dp)
-            ) {
-                Text("Vivienda")
-            }
+            Column {
 
-            Button(
-                onClick = {
-                    opcionSeleccionada = "objetos"
-                },
-                modifier = Modifier.padding(bottom = 12.dp)
-            ) {
-                Text("Objetos")
+                Button(
+                    onClick = {
+                        menuAbierto = true
+                    }
+                ) {
+                    Text("Menú")
+                }
+
+                DropdownMenu(
+                    expanded = menuAbierto,
+                    onDismissRequest = {
+                        menuAbierto = false
+                    }
+                ) {
+
+                    DropdownMenuItem(
+                        text = {
+                            Text("Puertas")
+                        },
+                        onClick = {
+                            opcionSeleccionada = "puertas"
+                            menuAbierto = false
+                        }
+                    )
+
+                    DropdownMenuItem(
+                        text = {
+                            Text("Objetos")
+                        },
+                        onClick = {
+                            opcionSeleccionada = "objetos"
+                            menuAbierto = false
+                        }
+                    )
+                }
             }
         }
 
@@ -76,10 +96,13 @@ fun MenuScreen() {
                 .fillMaxSize()
                 .padding(32.dp)
         ) {
-            when(opcionSeleccionada){
-                "vivienda" -> {
+
+            when (opcionSeleccionada) {
+
+                "puertas" -> {
                     PuertaScreen()
                 }
+
                 "objetos" -> {
                     ObjetoScreen()
                 }
@@ -87,3 +110,4 @@ fun MenuScreen() {
         }
     }
 }
+
