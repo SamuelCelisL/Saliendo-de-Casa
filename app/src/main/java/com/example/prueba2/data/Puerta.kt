@@ -13,5 +13,7 @@ data class Puerta(
 
     val latitud: Double,
 
-    val longitud: Double
+    val longitud: Double,
+
+    val activa: Boolean = true
 )

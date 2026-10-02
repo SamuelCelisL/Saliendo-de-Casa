@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 
@@ -17,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Switch
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -181,6 +183,30 @@ fun PuertaScreen() {
                             Text(
                                 text = "Longitud: ${puerta.longitud}"
                             )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+
+                                Text(
+                                    text = if (puerta.activa) {
+                                        "Puerta activa"
+                                    } else {
+                                        "Puerta desactivada"
+                                    }
+                                )
+
+                                Switch(
+                                    checked = puerta.activa,
+                                    onCheckedChange = { nuevoEstado ->
+
+                                        puertaViewModel.cambiarEstadoPuerta(
+                                            puerta = puerta,
+                                            activa = nuevoEstado
+                                        )
+                                    }
+                                )
+                            }
 
                             Button(
                                 onClick = {
@@ -322,7 +348,8 @@ fun PuertaScreen() {
                                     id = puertaSeleccionada!!.id,
                                     nombre = nombrePuerta,
                                     latitud = latitud!!,
-                                    longitud = longitud!!
+                                    longitud = longitud!!,
+                                    activa = puertaSeleccionada!!.activa
                                 )
                             )
 

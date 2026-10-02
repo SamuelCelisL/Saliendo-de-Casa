@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.prueba2.ui.screens.objeto.ObjetoScreen
 import com.example.prueba2.ui.screens.vivienda.PuertaScreen
 
 @Composable
@@ -67,15 +68,6 @@ fun MenuScreen() {
             ) {
                 Text("Objetos")
             }
-
-            Button(
-                onClick = {
-                    opcionSeleccionada = "configuracion"
-                },
-                modifier = Modifier.padding(bottom = 12.dp)
-            ) {
-                Text("Opción 2")
-            }
         }
 
         // CONTENIDO
@@ -89,26 +81,7 @@ fun MenuScreen() {
                     PuertaScreen()
                 }
                 "objetos" -> {
-                    Text(
-                        text = "Bienvenido",
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-
-                    Text(
-                        text = "Selecciona una opción del menú.",
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                }
-                "configuracion" -> {
-                    Text(
-                        text = "Bienvenido",
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-
-                    Text(
-                        text = "Selecciona una opción del menú.",
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+                    ObjetoScreen()
                 }
             }
         }

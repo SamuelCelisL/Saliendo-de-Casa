@@ -60,6 +60,22 @@ class PuertaViewModel(
             cargarPuertas()
         }
     }
+
+    fun cambiarEstadoPuerta(
+        puerta: Puerta,
+        activa: Boolean
+    ) {
+        viewModelScope.launch {
+
+            val puertaActualizada = puerta.copy(
+                activa = activa
+            )
+
+            puertaDao.actualizarPuerta(puertaActualizada)
+
+            cargarPuertas()
+        }
+    }
 }
 
 class PuertaViewModelFactory(
