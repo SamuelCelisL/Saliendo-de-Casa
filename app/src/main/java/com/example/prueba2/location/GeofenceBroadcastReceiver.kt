@@ -12,6 +12,7 @@ import com.google.android.gms.location.GeofencingEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.example.prueba2.notification.NotificationHelper
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
@@ -93,6 +94,19 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                             "GEOFENCE",
                             "Objeto: ${objeto.nombre}"
                         )
+                    }
+                    val nombresObjetos =
+                        objetos.map {
+                            it.nombre
+                        }
+
+                    if (nombresObjetos.isNotEmpty()) {
+
+                        NotificationHelper
+                            .mostrarRecordatorio(
+                                context,
+                                nombresObjetos
+                            )
                     }
                 }
 

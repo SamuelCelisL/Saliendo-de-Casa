@@ -16,10 +16,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.prueba2.ui.screens.welcome.WelcomeScreen
 import com.example.prueba2.ui.screens.menu.MenuScreen
 import com.example.prueba2.ui.theme.Prueba2Theme
+import com.example.prueba2.notification.NotificationHelper
+import android.Manifest
+import android.os.Build
+
+import androidx.activity.result.contract.ActivityResultContracts
 
 class MainActivity : ComponentActivity() {
+
+    private val solicitarPermisoNotificaciones =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { permitido ->
+
+            if (permitido) {
+                println("Permiso de notificaciones concedido")
+            } else {
+                println("Permiso de notificaciones denegado")
+            }
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        NotificationHelper.crearCanalNotificaciones(this)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            solicitarPermisoNotificaciones.launch(
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        }
+
         setContent {
             Prueba2Theme {
                 // A surface container using the 'background' color from the theme

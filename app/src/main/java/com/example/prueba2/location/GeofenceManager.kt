@@ -47,7 +47,7 @@ class GeofenceManager(
             .setCircularRegion(
                 puerta.latitud,
                 puerta.longitud,
-                50f
+                5f
             )
             .setExpirationDuration(
                 Geofence.NEVER_EXPIRE
