@@ -29,6 +29,23 @@ El usuario puede:
 * Eliminar el geofence cuando una puerta es desactivada o eliminada.
 * Actualizar el geofence cuando se modifican las coordenadas de una puerta.
 
+## Pantallas de la aplicación
+
+### Pantalla de Bienvenida
+![Pantalla WelcomeScreen](Screenshots/WelcomeScreen.png)
+
+### Pantalla Menú - Puertas
+![Pantalla Puertas](Screenshots/Menu-Puertas.png)
+
+### Pantalla Registro/Edición de puertas
+![Registro/edición de puertas](Screenshots/Creacion-Edicion%20puerta.png)
+
+### Pantalla Menú - Objetos
+![Pantalla Objetos](Screenshots/menu-Objetos.png)
+
+### Pantalla Registro/Edición de Objetos
+![Registro/edición de objetos](Screenshots/Creacion-Edicion%20objeto.png)
+
 La posibilidad de registrar varias puertas permite utilizar la aplicación en diferentes puntos de salida.
 
 Por ejemplo:
