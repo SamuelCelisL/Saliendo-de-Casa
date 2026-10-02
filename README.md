@@ -32,19 +32,19 @@ El usuario puede:
 ## Pantallas de la aplicación
 
 ### Pantalla de Bienvenida
-![Pantalla WelcomeScreen](Screenshots/WelcomeScreen.png)
+![Pantalla WelcomeScreen](app/Screenshots/WelcomeScreen.png)
 
 ### Pantalla Menú - Puertas
-![Pantalla Puertas](Screenshots/Menu-Puertas.png)
+![Pantalla Puertas](app/Screenshots/Menu-Puertas.png)
 
 ### Pantalla Registro/Edición de puertas
-![Registro/edición de puertas](Screenshots/Creacion-Edicion%20puerta.png)
+![Registro/edición de puertas](app/Screenshots/Creacion-Edicion puerta.png)
 
 ### Pantalla Menú - Objetos
-![Pantalla Objetos](Screenshots/menu-Objetos.png)
+![Pantalla Objetos](app/Screenshots/menu-Objetos.png)
 
 ### Pantalla Registro/Edición de Objetos
-![Registro/edición de objetos](Screenshots/Creacion-Edicion%20objeto.png)
+![Registro/edición de objetos](app/Screenshots/Creacion-Edicion objeto.png)
 
 La posibilidad de registrar varias puertas permite utilizar la aplicación en diferentes puntos de salida.
 
