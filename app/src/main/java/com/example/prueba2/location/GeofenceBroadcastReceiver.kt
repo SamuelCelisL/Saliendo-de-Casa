@@ -80,34 +80,25 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
                     Log.d(
                         "GEOFENCE",
-                        "Entraste en la zona: ${geofence.requestId}"
+                        "Geofence activado: ${geofence.requestId}"
                     )
+                }
 
-                    Log.d(
-                        "GEOFENCE",
-                        "Objetos registrados: ${objetos.size}"
+                Log.d(
+                    "NOTIFICACION",
+                    "Cantidad de geofences activados: ${geofences.size}"
+                )
+
+                val nombresObjetos = objetos.map {
+                    it.nombre
+                }
+
+                if (nombresObjetos.isNotEmpty()) {
+
+                    NotificationHelper.mostrarRecordatorio(
+                        context,
+                        nombresObjetos
                     )
-
-                    for (objeto in objetos) {
-
-                        Log.d(
-                            "GEOFENCE",
-                            "Objeto: ${objeto.nombre}"
-                        )
-                    }
-                    val nombresObjetos =
-                        objetos.map {
-                            it.nombre
-                        }
-
-                    if (nombresObjetos.isNotEmpty()) {
-
-                        NotificationHelper
-                            .mostrarRecordatorio(
-                                context,
-                                nombresObjetos
-                            )
-                    }
                 }
 
             } finally {

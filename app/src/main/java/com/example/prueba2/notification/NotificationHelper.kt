@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -49,6 +50,10 @@ object NotificationHelper {
         context: Context,
         objetos: List<String>
     ) {
+        Log.d(
+            "NOTIFICACION",
+            "mostrarRecordatorio() ejecutado"
+        )
 
         // Android 13 o superior necesita permiso
         // para mostrar notificaciones.
@@ -83,6 +88,10 @@ object NotificationHelper {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()
+        Log.d(
+            "NOTIFICACION",
+            "Enviando notificación. ID=1001"
+        )
 
         NotificationManagerCompat
             .from(context)
@@ -90,6 +99,11 @@ object NotificationHelper {
                 1001,
                 notificacion
             )
+
+        Log.d(
+            "NOTIFICACION",
+            "NotificationManager.notify() ejecutado"
+        )
     }
 
     fun obtenerChannelId(): String {

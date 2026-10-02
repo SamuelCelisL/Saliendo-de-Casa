@@ -21,6 +21,9 @@ import android.Manifest
 import android.os.Build
 
 import androidx.activity.result.contract.ActivityResultContracts
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 
 class MainActivity : ComponentActivity() {
 
@@ -30,9 +33,15 @@ class MainActivity : ComponentActivity() {
         ) { permitido ->
 
             if (permitido) {
-                println("Permiso de notificaciones concedido")
+                Log.d(
+                    "NOTIFICACION",
+                    "Permiso de notificaciones concedido"
+                )
             } else {
-                println("Permiso de notificaciones denegado")
+                Log.d(
+                    "NOTIFICACION",
+                    "Permiso de notificaciones DENEGADO"
+                )
             }
         }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +51,51 @@ class MainActivity : ComponentActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-            solicitarPermisoNotificaciones.launch(
-                Manifest.permission.POST_NOTIFICATIONS
+            val permiso =
+                checkSelfPermission(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+
+            Log.d(
+                "NOTIFICACION",
+                "Permiso actual: $permiso"
             )
+
+            Log.d(
+                "NOTIFICACION",
+                "PERMISSION_GRANTED: ${PackageManager.PERMISSION_GRANTED}"
+            )
+
+            val notificacionesHabilitadas =
+                NotificationManagerCompat
+                    .from(this)
+                    .areNotificationsEnabled()
+
+            Log.d(
+                "NOTIFICACION",
+                "Notificaciones habilitadas: $notificacionesHabilitadas"
+            )
+
+            if (
+                permiso != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                Log.d(
+                    "NOTIFICACION",
+                    "Solicitando permiso POST_NOTIFICATIONS"
+                )
+
+                solicitarPermisoNotificaciones.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+
+            } else {
+
+                Log.d(
+                    "NOTIFICACION",
+                    "Permiso de notificaciones ya concedido"
+                )
+            }
         }
 
         setContent {
