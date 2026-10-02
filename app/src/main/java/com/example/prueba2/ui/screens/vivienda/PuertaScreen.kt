@@ -269,13 +269,18 @@ fun PuertaScreen() {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Button(
-                onClick = {
-                    reiniciarValores()
-                },
-                modifier = Modifier.padding(top = 24.dp)
-            ) {
-                Text("X")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ){
+                Button(
+                    onClick = {
+                        reiniciarValores()
+                    },
+                    modifier = Modifier.padding(top = 24.dp)
+                ) {
+                    Text("X")
+                }
             }
 
             Text(
